@@ -1,15 +1,22 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+// Add React import for Functional Component type
+import React, { useState, useEffect, FC } from 'react';
 import axios from 'axios';
 
-const Quiz = () => {
-  const [quiz, setQuiz] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [score, setScore] = useState(0);
-  const [wrongAnswers, setWrongAnswers] = useState(0);
-  const [isQuizOver, setQuizOver] = useState(false);
-  const [imageData, setImageData] = useState(null);
+interface QuizType {
+  question: string,
+  options: string[],
+  answer: number
+}
+
+const Quiz: FC = () => {
+  const [quiz, setQuiz] = useState<QuizType | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [score, setScore] = useState<number>(0);
+  const [wrongAnswers, setWrongAnswers] = useState<number>(0);
+  const [isQuizOver, setQuizOver] = useState<boolean>(false);
+  const [imageData, setImageData] = useState<string | null>(null);
 
   const fetchQuiz = async () => {
     // We need to adjust the url to point to our new API route
@@ -25,22 +32,22 @@ const Quiz = () => {
       max_tokens: 100,
       }, {
           headers: {
-              "Authorization": "Bearer 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"
+              "Authorization": "Bearer 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"
           }
       }
     );
 
-    let gptOutput = gptRes.data.choices[0].text;
-    let lines = gptOutput.split('\n').filter(Boolean);
-    let question = lines[0];
-    let options = lines.slice(1, 5);
-    let answerText = lines[5].split('. ')[1];
-    let answerIndex = options.findIndex(option => option.includes(answerText));
+    let gptOutput: string = gptRes.data.choices[0].text;
+    let lines: string[] = gptOutput.split('\n').filter(Boolean);
+    let question: string = lines[0];
+    let options: string[] = lines.slice(1, 5);
+    let answerText: string = lines[5].split('. ')[1];
+    let answerIndex: number = options.findIndex((option: string) => option.includes(answerText));
 
     setQuiz({ question, options, answer: answerIndex });
   };
 
-  const fetchImage = async (description) => {
+  const fetchImage = async (description: string) => {
     // This is a hypothetical call, replace with actual DALL-E API details
     const res = await axios.post('https://api.openai.com/v1/images/generations', {
       prompt: description,
@@ -49,7 +56,7 @@ const Quiz = () => {
       // Additional parameters...
     }, {
       headers: {
-        "Authorization": "Bearer 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"
+        "Authorization": "Bearer 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"
       }
     });
 
@@ -83,7 +90,7 @@ const Quiz = () => {
         <h1 className="text-center mb-4">Quiz</h1>
         {imageData && <img src={imageData} alt="Generated image" />}
         <p className="fs-5 mb-3">{quiz.question}</p>
-        {quiz.options.map((option, index) => (
+        {quiz.options.map((option: string, index: number) => (
           <div className="form-check" key={index}>
             <input
               className="form-check-input"
