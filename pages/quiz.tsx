@@ -32,7 +32,7 @@ const Quiz: FC = () => {
       max_tokens: 100,
       }, {
           headers: {
-              "Authorization": "Bearer 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"
+              "Authorization": `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
           }
       }
     );
@@ -56,7 +56,7 @@ const Quiz: FC = () => {
       // Additional parameters...
     }, {
       headers: {
-        "Authorization": "Bearer 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"
+        "Authorization": `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`
       }
     });
 
