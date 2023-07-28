@@ -9,19 +9,23 @@ const Quiz = () => {
   const [score, setScore] = useState(0);
   const [wrongAnswers, setWrongAnswers] = useState(0);
   const [isQuizOver, setQuizOver] = useState(false);
+  const [imageData, setImageData] = useState(null);
 
   const fetchQuiz = async () => {
     // We need to adjust the url to point to our new API route
     const res = await axios.get('/api/film');
     const film = res.data;
   
+    // Call to fetch image
+    fetchImage(`Illustration of a scene from the film "${film.film_name}"`);
+
     const gptRes = await axios.post('https://api.openai.com/v1/completions', {
       model: "text-davinci-003",
       prompt: `Generate a trivia question for quiz about the film "${film.film_name}" and generate 4 answers where only 1 of them should be true. Please tell which answer is correct. Please use this template for your answer, example: \nQ: What is the name of the policeman from Queens who works with Lacey in the 1982 film \"Cagney & Lacey\"?\n\nA. Harold Gorman\nB. Isiah Orenstein\nC. Harvey Lacey\nD. Victor Isbecki\n\nAnswer: D. Victor Isbecki`,
       max_tokens: 100,
       }, {
           headers: {
-              "Authorization": "Bearer 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"
+              "Authorization": "Bearer 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"
           }
       }
     );
@@ -35,6 +39,25 @@ const Quiz = () => {
 
     setQuiz({ question, options, answer: answerIndex });
   };
+
+  const fetchImage = async (description) => {
+    // This is a hypothetical call, replace with actual DALL-E API details
+    const res = await axios.post('https://api.openai.com/v1/images/generations', {
+      prompt: description,
+      n: 1,
+      size: '512x512'
+      // Additional parameters...
+    }, {
+      headers: {
+        "Authorization": "Bearer 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"
+      }
+    });
+
+    console.log(res);
+    console.log(res.data.data[0].url);
+    setImageData(res.data.data[0].url);  // Assuming this is the image data
+  };
+
 
   useEffect(() => {
     fetchQuiz();
@@ -58,6 +81,7 @@ const Quiz = () => {
     <div className="quiz container d-flex flex-column justify-content-center align-items-center" style={{height: '100vh'}}>
       <div className="p-4 bg-white rounded shadow" style={{width: '100%', maxWidth: '600px'}}>
         <h1 className="text-center mb-4">Quiz</h1>
+        {imageData && <img src={imageData} alt="Generated image" />}
         <p className="fs-5 mb-3">{quiz.question}</p>
         {quiz.options.map((option, index) => (
           <div className="form-check" key={index}>
