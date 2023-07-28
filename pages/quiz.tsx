@@ -32,7 +32,7 @@ const Quiz: FC = () => {
       max_tokens: 100,
       }, {
           headers: {
-              "Authorization": "Bearer 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"
+              "Authorization": "Bearer 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"
           }
       }
     );
@@ -56,7 +56,7 @@ const Quiz: FC = () => {
       // Additional parameters...
     }, {
       headers: {
-        "Authorization": "Bearer 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"
+        "Authorization": "Bearer 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"
       }
     });
 
