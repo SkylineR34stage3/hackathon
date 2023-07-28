@@ -3,7 +3,7 @@ import Quiz from '@/pages/quiz';  // Adjust the path based on where your Quiz co
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between p-1">
       <Quiz />
     </main>
   )
